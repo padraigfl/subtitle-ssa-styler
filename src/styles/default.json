@@ -1,0 +1,10 @@
+{
+  "fontsize": 24,
+  "color": "white",
+  "topAlign": false,
+  "outline": {
+    "color": "rgba(0, 0, 0, 0.2)"
+  },
+  "bold": false,
+  "italic": false
+}

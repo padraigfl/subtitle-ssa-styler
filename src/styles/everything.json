@@ -1,0 +1,15 @@
+{
+  "font": "Times New Roman",
+  "fontsize": 12,
+  "color": "white",
+  "topAlign": true,
+  "outline": {
+    "color":  "rgb(0,0,0)"
+  },
+  "background": {
+    "color":  "rgb(0,0,0)"
+  },
+  "bold": true,
+  "italic": true,
+  "marginH": 10
+}
