@@ -1,7 +1,5 @@
 'use strict';
 var hex = require('rgba-convert').hex;
-var _defaultPrimary = require('./styles/default.json');
-var _defaultSecondary = require('./styles/white16.json');
 
 var styleFormat = [
   'Name',
@@ -82,8 +80,9 @@ function getOutlineOrBackColor(outline, background, defaultColor) {
   }
 }
 
-function buildStyle (styleName, obj) {
+function buildStyle (stylesArray) {
   var defaults = {
+    name: 'Default',
     font: 'Tahoma',
     fontsize: 24,
     color: 'rgba(0, 0, 0, 0.99)',
@@ -95,39 +94,49 @@ function buildStyle (styleName, obj) {
     marginH: 30,
     marginV: 10,
   };
+  if(!stylesArray) {
+    stylesArray = [ defaults ];
+  }
 
-  obj = Object.assign({}, defaults, obj);
+  var styles = stylesArray.map(function(styleObj, idx) {
 
-  var color = processColor(obj.color, defaults.color);
-  var marginH = getInteger(obj.marginH, defaults.marginH);
+    var obj = Object.assign({}, defaults, styleObj);
 
-  var valid = {
-    Name: styleName,
-    BorderStyle: getBorderStyle(obj.outline, obj.background),
-    Shadow: 0,
-    AlphaLevel: 0,
-    Encoding: 0,
-    MarginL: marginH,
-    MarginR: marginH,
-    MarginV: getInteger(obj.marginV, defaults.marginV),
-    Fontname: getFont( typeof obj.font === 'string' ? obj.font : defaults.font),
-    PrimaryColour: color,
-    SecondaryColour: color,
-    TertiaryColour: color,
-    BackColour: (obj.outline || obj.background) ?
-      getOutlineOrBackColor(obj.outline, obj.background, defaults.outlineColor) : processColor(),
-    Alignment: getAlignment(obj.topAlign),
-    Fontsize: getInteger(obj.fontsize, defaults.fontsize),
-    Bold: obj.bold ? 1 : 0,
-    Italic: obj.italic ? 1 : 0,
-    Outline: (obj.outline || obj.background) ? 1 : 0,
-  };
+    var color = processColor(obj.color, defaults.color);
+    var marginH = getInteger(obj.marginH, defaults.marginH);
+  
+    var valid = {
+      Name: obj.name+idx,
+      BorderStyle: getBorderStyle(obj.outline, obj.background),
+      Shadow: 0,
+      AlphaLevel: 0,
+      Encoding: 0,
+      MarginL: marginH,
+      MarginR: marginH,
+      MarginV: getInteger(obj.marginV, defaults.marginV),
+      Fontname: getFont( typeof obj.font === 'string' ? obj.font : defaults.font),
+      PrimaryColour: color,
+      SecondaryColour: color,
+      TertiaryColour: color,
+      BackColour: (obj.outline || obj.background) ?
+        getOutlineOrBackColor(obj.outline, obj.background, defaults.outlineColor) : processColor(),
+      Alignment: getAlignment(obj.topAlign),
+      Fontsize: getInteger(obj.fontsize, defaults.fontsize),
+      Bold: obj.bold ? 1 : 0,
+      Italic: obj.italic ? 1 : 0,
+      Outline: (obj.outline || obj.background) ? 1 : 0,
+    };
+  
+    var style = styleFormat.reduce(function (acc, val, i) {
+      return acc + valid[val] + ((i !== styleFormat.length - 1) ? ',': '');
+    }, '');
+  
+    return 'Style: ' + style;
+  });
 
-  var style = styleFormat.reduce(function (acc, val, i) {
-    return acc + valid[val] + ((i !== styleFormat.length - 1) ? ',': '');
+  return styles.reduce(function(acc, style) {
+    return acc + style + '\n';
   }, '');
-
-  return 'Style: ' + style + '\n';
 }
 
 function getFormat () {
@@ -136,13 +145,15 @@ function getFormat () {
   });
 }
 
-function buildStyleSection(primaryStyle, secondaryStyle) {
-  var primary = primaryStyle ? primaryStyle : _defaultPrimary;
-  var secondary = secondaryStyle ? secondaryStyle : _defaultSecondary;
+function buildStyleSection(styles) {
+  if (!Array.isArray(styles) && typeof styles === 'object') {
+    styles = [styles];
+  } else if (!!styles && typeof styles !== 'object') {
+    throw TypeError;
+  }
   return '[V4 Styles]\n' +
     getFormat() + '\n' +
-    buildStyle('primary', primary) +
-    buildStyle('secondary', secondary);
+    buildStyle(styles);
 }
 
 module.exports = buildStyleSection;

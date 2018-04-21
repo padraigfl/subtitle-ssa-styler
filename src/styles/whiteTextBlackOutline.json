@@ -1,4 +1,5 @@
 {
+  "name": "whiteTextBlackOutline",
   "fontsize": 24,
   "color":  "rgb(255,255,255)",
   "topAlign": false,
