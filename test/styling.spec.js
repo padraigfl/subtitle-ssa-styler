@@ -9,7 +9,7 @@ describe('style', function() {
     var result = '[V4 Styles]\n' +
       'Format: Name,BorderStyle,Shadow,AlphaLevel,Encoding,MarginL,MarginR,MarginV,Fontname,' +
       'PrimaryColour,SecondaryColour,TertiaryColour,BackColour,Alignment,Fontsize,Bold,Italic,Outline\n' +
-      'Style: Default0,1,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&HFFFFFF33,2,24,0,0,1\n';
+      'Style: Default0,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n';
 
     expect(styler()).to.equal(result);
   });
@@ -17,16 +17,16 @@ describe('style', function() {
     var result = '[V4 Styles]\n' +
       'Format: Name,BorderStyle,Shadow,AlphaLevel,Encoding,MarginL,MarginR,MarginV,Fontname,' +
       'PrimaryColour,SecondaryColour,TertiaryColour,BackColour,Alignment,Fontsize,Bold,Italic,Outline\n' +
-      'Style: Default0,1,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&HFFFFFF33,2,24,0,0,1\n';
+      'Style: Default0,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n';
     expect(styler({})).to.equal(result);
   });
   it('handles multiple entries via array argument', function() {
     var result = '[V4 Styles]\n' +
       'Format: Name,BorderStyle,Shadow,AlphaLevel,Encoding,MarginL,MarginR,MarginV,Fontname,' +
       'PrimaryColour,SecondaryColour,TertiaryColour,BackColour,Alignment,Fontsize,Bold,Italic,Outline\n' +
-      'Style: Default0,1,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&HFFFFFF33,2,24,0,0,1\n' +
-      'Style: Default1,1,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&HFFFFFF33,2,24,0,0,1\n' +
-      'Style: Default2,1,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&HFFFFFF33,2,24,0,0,1\n';
+      'Style: Default0,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n' +
+      'Style: Default1,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n' +
+      'Style: Default2,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n';
     expect(styler([{}, {}, {}])).to.equal(result);
   });
   it('handles correctly specified style objects', function() {
@@ -59,6 +59,45 @@ describe('style', function() {
         italic: false
       }
       
+    ])).to.equal(result);
+  });
+  it('handles different font', function() {
+    var result = '[V4 Styles]\n' +
+      'Format: Name,BorderStyle,Shadow,AlphaLevel,Encoding,MarginL,MarginR,MarginV,Fontname,' +
+      'PrimaryColour,SecondaryColour,TertiaryColour,BackColour,Alignment,Fontsize,Bold,Italic,Outline\n' +
+      'Style: everything0,1,0,0,0,10,10,10,Times New Roman,&HFFFFFFFF,&HFFFFFFFF,&HFFFFFFFF,&H000000FF,6,12,1,1,1\n';
+    expect(styler([
+      {
+        name: 'everything',
+        font: 'Times New Roman',
+        fontsize: 12,
+        color: 'white',
+        topAlign: true,
+        outline: {
+          color:  'rgb(0,0,0)'
+        },
+        bold: true,
+        italic: true,
+        marginH: 10
+      }
+    ])).to.equal(result);
+  });
+  it('handles no outline', function() {
+    var result = '[V4 Styles]\n' +
+      'Format: Name,BorderStyle,Shadow,AlphaLevel,Encoding,MarginL,MarginR,MarginV,Fontname,' +
+      'PrimaryColour,SecondaryColour,TertiaryColour,BackColour,Alignment,Fontsize,Bold,Italic,Outline\n' +
+      'Style: everything0,0,0,0,0,10,10,10,Times New Roman,&HFFFFFFFF,&HFFFFFFFF,&HFFFFFFFF,&H000000FF,6,12,1,1,0\n';
+    expect(styler([
+      {
+        name: 'everything',
+        font: 'Times New Roman',
+        fontsize: 12,
+        color: 'white',
+        topAlign: true,
+        bold: true,
+        italic: true,
+        marginH: 10
+      }
     ])).to.equal(result);
   });
 });

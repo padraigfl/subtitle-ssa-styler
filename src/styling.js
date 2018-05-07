@@ -86,9 +86,6 @@ function buildStyle (stylesArray) {
     font: 'Tahoma',
     fontsize: 24,
     color: 'rgba(0, 0, 0, 0.99)',
-    outline: {
-      color: 'rgba(255, 255, 255, 0.2)'
-    },
     bold: false,
     italic: false,
     marginH: 30,
