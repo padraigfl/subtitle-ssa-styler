@@ -9,7 +9,7 @@ describe('style', function() {
     var result = '[V4 Styles]\n' +
       'Format: Name,BorderStyle,Shadow,AlphaLevel,Encoding,MarginL,MarginR,MarginV,Fontname,' +
       'PrimaryColour,SecondaryColour,TertiaryColour,BackColour,Alignment,Fontsize,Bold,Italic,Outline\n' +
-      'Style: Default0,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n';
+      'Style: primary,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n';
 
     expect(styler()).to.equal(result);
   });
@@ -17,15 +17,15 @@ describe('style', function() {
     var result = '[V4 Styles]\n' +
       'Format: Name,BorderStyle,Shadow,AlphaLevel,Encoding,MarginL,MarginR,MarginV,Fontname,' +
       'PrimaryColour,SecondaryColour,TertiaryColour,BackColour,Alignment,Fontsize,Bold,Italic,Outline\n' +
-      'Style: Default0,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n';
+      'Style: primary,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n';
     expect(styler({})).to.equal(result);
   });
   it('handles multiple entries via array argument', function() {
     var result = '[V4 Styles]\n' +
       'Format: Name,BorderStyle,Shadow,AlphaLevel,Encoding,MarginL,MarginR,MarginV,Fontname,' +
       'PrimaryColour,SecondaryColour,TertiaryColour,BackColour,Alignment,Fontsize,Bold,Italic,Outline\n' +
-      'Style: Default0,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n' +
-      'Style: Default1,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n' +
+      'Style: primary,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n' +
+      'Style: secondary,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n' +
       'Style: Default2,0,0,0,0,30,30,10,Tahoma,&H000000FC,&H000000FC,&H000000FC,&H000000FF,2,24,0,0,0\n';
     expect(styler([{}, {}, {}])).to.equal(result);
   });
@@ -33,8 +33,8 @@ describe('style', function() {
     var result = '[V4 Styles]\n' +
       'Format: Name,BorderStyle,Shadow,AlphaLevel,Encoding,MarginL,MarginR,MarginV,Fontname,' +
       'PrimaryColour,SecondaryColour,TertiaryColour,BackColour,Alignment,Fontsize,Bold,Italic,Outline\n' +
-      'Style: whiteTextBlackOverlay0,3,0,0,0,30,30,10,Tahoma,&H000000FF,&H000000FF,&H000000FF,&HFFFFFFFF,2,24,0,0,1\n' +
-      'Style: blackTextWhiteOutline1,1,0,0,0,30,30,10,Tahoma,&H000000FF,&H000000FF,&H000000FF,&HFFFFFFFF,2,24,0,0,1\n';
+      'Style: primary,3,0,0,0,30,30,10,Tahoma,&H000000FF,&H000000FF,&H000000FF,&HFFFFFFFF,2,24,0,0,1\n' +
+      'Style: secondary,1,0,0,0,30,30,10,Tahoma,&H000000FF,&H000000FF,&H000000FF,&HFFFFFFFF,2,24,0,0,1\n';
     expect(styler([
       {
         name: 'whiteTextBlackOverlay',
@@ -65,7 +65,7 @@ describe('style', function() {
     var result = '[V4 Styles]\n' +
       'Format: Name,BorderStyle,Shadow,AlphaLevel,Encoding,MarginL,MarginR,MarginV,Fontname,' +
       'PrimaryColour,SecondaryColour,TertiaryColour,BackColour,Alignment,Fontsize,Bold,Italic,Outline\n' +
-      'Style: everything0,1,0,0,0,10,10,10,Times New Roman,&HFFFFFFFF,&HFFFFFFFF,&HFFFFFFFF,&H000000FF,6,12,1,1,1\n';
+      'Style: primary,1,0,0,0,10,10,10,Times New Roman,&HFFFFFFFF,&HFFFFFFFF,&HFFFFFFFF,&H000000FF,6,12,1,1,1\n';
     expect(styler([
       {
         name: 'everything',
@@ -86,7 +86,7 @@ describe('style', function() {
     var result = '[V4 Styles]\n' +
       'Format: Name,BorderStyle,Shadow,AlphaLevel,Encoding,MarginL,MarginR,MarginV,Fontname,' +
       'PrimaryColour,SecondaryColour,TertiaryColour,BackColour,Alignment,Fontsize,Bold,Italic,Outline\n' +
-      'Style: everything0,0,0,0,0,10,10,10,Times New Roman,&HFFFFFFFF,&HFFFFFFFF,&HFFFFFFFF,&H000000FF,6,12,1,1,0\n';
+      'Style: primary,0,0,0,0,10,10,10,Times New Roman,&HFFFFFFFF,&HFFFFFFFF,&HFFFFFFFF,&H000000FF,6,12,1,1,0\n';
     expect(styler([
       {
         name: 'everything',
@@ -99,5 +99,12 @@ describe('style', function() {
         marginH: 10
       }
     ])).to.equal(result);
+  });
+  it('throws error when given wrong format', function (){
+    expect( 
+      function() {
+        styler('potato');
+      }
+    ).to.throw(TypeError);
   });
 });

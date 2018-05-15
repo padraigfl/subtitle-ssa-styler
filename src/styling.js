@@ -101,9 +101,18 @@ function buildStyle (stylesArray) {
 
     var color = processColor(obj.color, defaults.color);
     var marginH = getInteger(obj.marginH, defaults.marginH);
+    var name;
+
+    if (idx === 0) {
+      name = 'primary';
+    } else if (idx === 1) {
+      name = 'secondary';
+    } else {
+      name = obj.name + idx;
+    }
   
     var valid = {
-      Name: obj.name+idx,
+      Name: name,
       BorderStyle: getBorderStyle(obj.outline, obj.background),
       Shadow: 0,
       AlphaLevel: 0,
@@ -146,7 +155,7 @@ function buildStyleSection(styles) {
   if (!Array.isArray(styles) && typeof styles === 'object') {
     styles = [styles];
   } else if (!!styles && typeof styles !== 'object') {
-    throw TypeError;
+    throw TypeError('invalid argument type');
   }
   return '[V4 Styles]\n' +
     getFormat() + '\n' +
