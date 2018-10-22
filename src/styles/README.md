@@ -1,7 +1,5 @@
 # Style Object Formatting
 
-Options are:
-
 - font: string, specify a font name (default Tahoma)
 - fontsize: numeric, ideally keep between 12 and 36 (default 24)
 - color: requires exact string matches, see section below on supported colors (default white)
@@ -12,8 +10,8 @@ Options are:
 - topAlign: boolean (default false, aligns to bottom of screen)
 - marginH, marginV: margins on text, try to keep low
 
-
 Currently supported colours (must match casing):
+_(note: this will change to rgba provided hex based formats work, drastically improving options)_
 
 - black
 - white
@@ -21,10 +19,8 @@ Currently supported colours (must match casing):
 - green
 - blue
 - yellow
-(note: this will change to rgba provided hex based formats work, drastically improving options)
 
-
-Currently support fonts:
+Currently supported fonts:
 
 - Tahoma
 - Times New Roman

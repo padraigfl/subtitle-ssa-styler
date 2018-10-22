@@ -2,7 +2,7 @@
 'use strict';
 
 var expect = require('chai').expect;
-var styler = require('../src/styling');
+var styler = require('../dist/styling');
 
 describe('style', function() {
   it('works with default', function() {
@@ -39,7 +39,7 @@ describe('style', function() {
       {
         name: 'whiteTextBlackOverlay',
         fontsize: 24,
-        color: 'rgb(0,0,0)',
+        color: 'rgba(0,0,0,1)',
         topAlign: false,
         background: {
           color: 'rgb(255,255,255)'
