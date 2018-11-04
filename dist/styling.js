@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const rgba_convert_1 = require("rgba-convert");
-var styleFormat = [
+const styleFormat = [
     'Name',
     'BorderStyle',
     'Shadow',
@@ -82,9 +82,9 @@ const buildStyle = (stylesArray) => {
     }
     const styles = stylesArray.map((styleObj, idx) => {
         const obj = Object.assign({}, defaults, styleObj);
-        var color = processColor(obj.color || defaults.color);
-        var marginH = getInteger(obj.marginH || defaults.marginH);
-        var name;
+        const color = processColor(obj.color || defaults.color);
+        const marginH = getInteger(obj.marginH || defaults.marginH);
+        let name;
         if (idx === 0) {
             name = 'primary';
         }

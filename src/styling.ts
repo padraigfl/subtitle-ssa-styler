@@ -1,46 +1,46 @@
 import { hex } from 'rgba-convert';
 
 interface SsaStylesObj {
-  Name?: string,
-  BorderStyle?: number,
-  Shadow?: number,
-  AlphaLevel?: number,
-  Encoding?: number,
-  MarginL?: number,
-  MarginR?: number,
-  MarginV?: number,
-  Fontname?: string,
-  PrimaryColour?: string,
-  SecondaryColour?: string,
-  TertiaryColour?: string,
-  BackColour?: string,
-  Alignment: 2|6,
-  Fontsize?: number,
-  Bold?: 0|1,
-  Italic?: 0|1,
-  Outline?: 0|1,
-  [key: string]: any,
+  Name?: string;
+  BorderStyle?: number;
+  Shadow?: number;
+  AlphaLevel?: number;
+  Encoding?: number;
+  MarginL?: number;
+  MarginR?: number;
+  MarginV?: number;
+  Fontname?: string;
+  PrimaryColour?: string;
+  SecondaryColour?: string;
+  TertiaryColour?: string;
+  BackColour?: string;
+  Alignment: 2|6;
+  Fontsize?: number;
+  Bold?: 0|1;
+  Italic?: 0|1;
+  Outline?: 0|1;
+  [key: string]: any;
 }
 
 interface ColorObj {
-  color: string,
+  color: string;
 }
 
 interface ConfigStylesObj {
-  name?: string,
-  font?: string,
-  fontsize?: number,
-  color?: string,
-  bold?: boolean,
-  italic?: boolean,
-  marginH?: number,
-  marginV?: number,
-  topAlign?: boolean,
-  outline?: ColorObj,
-  background?: ColorObj,
+  name?: string;
+  font?: string;
+  fontsize?: number;
+  color?: string;
+  bold?: boolean;
+  italic?: boolean;
+  marginH?: number;
+  marginV?: number;
+  topAlign?: boolean;
+  outline?: ColorObj;
+  background?: ColorObj;
 }
 
-var styleFormat = [
+const styleFormat = [
   'Name',
   'BorderStyle', // e.g. 1
   'Shadow', // eg 0 (binary?)
@@ -64,14 +64,14 @@ var styleFormat = [
 // TODO, switch to other color scheme
 const getSsaColor = (rgbaColor = ''): string => {
   let convertedRgba = hex(rgbaColor).toUpperCase().replace('#', '');
-  if(convertedRgba.length<5) {
+  if (convertedRgba.length < 5) {
     convertedRgba = convertedRgba.split('').reduce((acc, char) => acc + char + char, '');
   }
-  if(convertedRgba.length === 6){
+  if (convertedRgba.length === 6) {
     convertedRgba = convertedRgba + 'FF';
   }
-  return '&H'+convertedRgba;
-}
+  return '&H' + convertedRgba;
+};
 
 const processColor = (value: string|undefined, defaults?: string): string => (
   getSsaColor(typeof value === 'string' ? value : defaults)
@@ -107,13 +107,13 @@ const getBorderStyle = ({ background, outline}: ConfigStylesObj): number => {
 };
 
 const getOutlineOrBackColor = (outline?: ColorObj, background?: ColorObj): string => {
-  if(background && background.color) {
+  if (background && background.color) {
     return processColor(background.color);
   } else if (outline && outline.color) {
     return processColor(outline.color);
   }
   return processColor('rgba(0, 0, 0, 0)');
-}
+};
 
 const buildStyle = (stylesArray: ConfigStylesObj[]): string => {
   const defaults: ConfigStylesObj = {
@@ -127,7 +127,7 @@ const buildStyle = (stylesArray: ConfigStylesObj[]): string => {
     marginV: 10,
   };
 
-  if(!stylesArray) {
+  if (!stylesArray) {
     stylesArray = [ defaults ];
   }
 
@@ -135,9 +135,9 @@ const buildStyle = (stylesArray: ConfigStylesObj[]): string => {
 
     const obj: ConfigStylesObj = Object.assign({}, defaults, styleObj);
 
-    var color = processColor(obj.color || defaults.color);
-    var marginH = getInteger(obj.marginH || defaults.marginH);
-    var name;
+    const color = processColor(obj.color || defaults.color);
+    const marginH = getInteger(obj.marginH || defaults.marginH);
+    let name;
 
     if (idx === 0) {
       name = 'primary';
@@ -146,7 +146,7 @@ const buildStyle = (stylesArray: ConfigStylesObj[]): string => {
     } else {
       name = (obj.name || 'Failed') + idx;
     }
-  
+
     const valid: SsaStylesObj = {
       Name: name,
       BorderStyle: getBorderStyle(obj),
@@ -168,16 +168,16 @@ const buildStyle = (stylesArray: ConfigStylesObj[]): string => {
       Italic: obj.italic ? 1 : 0,
       Outline: (obj.outline || obj.background) ? 1 : 0,
     };
-  
+
     const style = styleFormat.reduce((acc, val, i) => (
-      acc + valid[val] + ((i !== styleFormat.length - 1) ? ',': '')
+      acc + valid[val] + ((i !== styleFormat.length - 1) ? ',' : '')
     ), '');
-  
+
     return 'Style: ' + style;
   });
 
   return styles.reduce((acc, style) => acc + style + '\n', '');
-}
+};
 
 const getFormat = (): string => 'Format: ' + styleFormat.reduce((acc, val) => acc + ',' + val);
 
@@ -190,6 +190,6 @@ const buildStyleSection = (styles: ConfigStylesObj|ConfigStylesObj[]) => {
   return '[V4 Styles]\n' +
     getFormat() + '\n' +
     buildStyle(styles);
-}
+};
 
 module.exports = buildStyleSection;

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "cover": "istanbul cover node_modules/mocha/bin/_mocha test/*.js - - -R spec",
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha test/*.js -- -R spec",
     "ci": "npm run lint && npm run build && npm run cover",
     "docs": "typedoc --out docs src",
     "gh-pages": "rimraf docs && npm run docs && gh-pages -d docs",
